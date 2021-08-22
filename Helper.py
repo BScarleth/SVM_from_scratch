@@ -15,12 +15,6 @@ class Helper:
         return lines
 
     @staticmethod
-    def normalize_audio(audio_sample):
-        audio_sample['audio'] = audio_sample['audio'] / np.max(np.abs(audio_sample['audio']))
-        audio_sample['audio'] = audio_sample['audio'][:882000]
-        return audio_sample
-
-    @staticmethod
     def show_audio(audio_sample, title):
         plt.figure(figsize=(15, 4))
         plt.plot(np.linspace(0, len(audio_sample['audio']) / audio_sample['sample'],
@@ -40,34 +34,12 @@ class Helper:
         plt.show()
 
     @staticmethod
-    def encode_classes(class_name):
-        if class_name == "arabic":
-            return 1
-        if class_name == "dutch":
-            return 2
-        if class_name == "english_australia":
-            return 3
-        if class_name == "english_usa":
-            return 4
-        if class_name == "french":
-            return 5
-        if class_name == "german":
-            return 6
-        if class_name == "korean":
-            return 7
-        if class_name == "russian":
-            return 8
-        if class_name == "spanish":
-            return 9
-        if class_name == "turkish":
-            return 10
-
-    @staticmethod
     def get_class_from_file_name(filename):
         return filename.split('/')[0]
 
     @staticmethod
     def read_features_file(filename):
+        print("Reading file...")
         audios_dict = []
 
         with open(filename + ".json") as f:
@@ -75,8 +47,9 @@ class Helper:
         f.close()
 
         for raw in sampleDict:
-            raw["c-coefficients"] = np.array(raw["c-coefficients"]).flatten()
+            raw["features"] = np.array(raw["features"])
             audios_dict.append(raw)
+        print("File ready!")
         return audios_dict
 
     @staticmethod
@@ -85,3 +58,4 @@ class Helper:
         for sample in data_class:
             _data.append([sample["features"], sample["audio_class"]])
         return _data
+
